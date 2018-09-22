@@ -11,6 +11,7 @@ Download this project as zip or clone in your machine, and import as Maven Proje
 ```
 NetBeans 8.2
 Java SDK 8.0
+A AWS IAM user (access_key and secret_key) with full permission to use S3 Service
 ```
 
 ## Built With
