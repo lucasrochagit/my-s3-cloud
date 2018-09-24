@@ -10,7 +10,6 @@ import com.lucasrochagit.entities.model.BucketModel;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
