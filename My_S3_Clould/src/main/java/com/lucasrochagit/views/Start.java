@@ -128,7 +128,7 @@ public class Start extends javax.swing.JFrame {
             l.setVisible(true);
             buckets = S3Methods.getInstance().listBuckets();
             l.dispose();
-            if (buckets != null) {
+            if (buckets == null) {
                 buckets = new ArrayList<BucketModel>();
             }
             Features f = new Features(buckets);
