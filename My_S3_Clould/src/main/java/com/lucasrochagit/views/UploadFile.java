@@ -267,7 +267,7 @@ public class UploadFile extends javax.swing.JFrame {
             uploadFile = file.getSelectedFile();
             fileName.setText(uploadFile.getPath());
         }
-
+        
     }//GEN-LAST:event_searchMouseClicked
 
     private void searchMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseExited

@@ -28,8 +28,7 @@ public class Start extends javax.swing.JFrame {
         initComponents();
         appearance();
         ImageIcon icon
-                = new ImageIcon
-                ("src/main/resources/com/lucasrochagit/interfaces/images/start.png");
+                = new ImageIcon("src/main/resources/com/lucasrochagit/interfaces/images/start.png");
         logo.setIcon(icon);
     }
 
@@ -107,18 +106,9 @@ public class Start extends javax.swing.JFrame {
 
     private void startMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startMouseClicked
         // TODO add your handling code here:   
-        buckets = S3Methods.getInstance().listBuckets();
-        if (buckets != null) {
-            Features f = new Features(buckets);
-            this.dispose();
-            f.setVisible(true);
-        } else {
-            JOptionPane
-                .showMessageDialog(null,
-                "Could not start application. Please try again later.", 
-                "Information", 
-                JOptionPane.INFORMATION_MESSAGE);
-        }
+        Thread t = new Thread(loadingBuckets);
+        t.start();
+        this.dispose();
     }//GEN-LAST:event_startMouseClicked
 
     private void startMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startMouseEntered
@@ -131,21 +121,36 @@ public class Start extends javax.swing.JFrame {
         start.setForeground(Color.BLACK);
     }//GEN-LAST:event_startMouseExited
 
+    Runnable loadingBuckets = new Runnable() {
+        @Override
+        public void run() {
+            LoginLoading l = new LoginLoading();
+            l.setVisible(true);
+            buckets = S3Methods.getInstance().listBuckets();
+            l.dispose();
+            if (buckets != null) {
+                buckets = new ArrayList<BucketModel>();
+            }
+            Features f = new Features(buckets);
+            f.setVisible(true);
+        }
+
+    };
+
     public static void appearance() {
         try {
             UIManager
-                .setLookAndFeel
-                ("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException |
-                InstantiationException |
-                IllegalAccessException |
-                javax.swing.UnsupportedLookAndFeelException ex) 
-                {
-                    java.util.logging.Logger
+                    .setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException
+                | InstantiationException
+                | IllegalAccessException
+                | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger
                     .getLogger(Start.class.getName())
                     .log(java.util.logging.Level.SEVERE, null, ex);
-                }
+        }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel logo;
