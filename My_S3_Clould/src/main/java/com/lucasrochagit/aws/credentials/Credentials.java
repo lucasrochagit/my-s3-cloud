@@ -33,7 +33,7 @@ public class Credentials {
 
     private void validateCredentials() {
         try {
-            BasicAWSCredentials credentials
+            BasicAWSCredentials credentials 
                     = new BasicAWSCredentials(accessKeyId, secretKeyId);
             this.credentials = new AWSStaticCredentialsProvider(credentials);
         } catch (Exception e) {

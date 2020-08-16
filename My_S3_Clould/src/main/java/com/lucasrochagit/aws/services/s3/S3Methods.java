@@ -57,10 +57,13 @@ public class S3Methods {
     }
 
     public boolean createBucket(String bucketName) {
-        boolean var = false;
+        boolean result = false;
         try {
+            if (s3.doesBucketExistV2(bucketName)) {
+                return result;
+            }
             s3.createBucket(bucketName);
-            var = true;
+            result = true;
         } catch (AmazonServiceException ex) {
             System.out.println("Caught an AmazonServiceException, "
                     + "which means your request made it "
@@ -72,7 +75,7 @@ public class S3Methods {
             System.out.println("Error Type:       " + ex.getErrorType());
             System.out.println("Request ID:       " + ex.getRequestId());
         }
-        return var;
+        return result;
     }
 
     public ArrayList<BucketModel> listBuckets() {
@@ -161,20 +164,20 @@ public class S3Methods {
         try {
             S3Object object = s3
                     .getObject(new GetObjectRequest(bucketName, fileName));
-            final BufferedInputStream i = 
-                    new BufferedInputStream(object.getObjectContent());
+            final BufferedInputStream i
+                    = new BufferedInputStream(object.getObjectContent());
             InputStream objectData = object.getObjectContent();
             Directory
-                .getInstance()
-                .createDirectories("C:\\Users\\"
-                        + System.getProperty("user.name")
-                        + "\\Desktop\\BACKUP_" + bucketName);
+                    .getInstance()
+                    .createDirectories("C:\\Users\\"
+                            + System.getProperty("user.name")
+                            + "\\Desktop\\" + bucketName);
             Files
-                .copy(objectData,
-                    new File("C:\\Users\\" +
-                            System.getProperty("user.name") +
-                            "\\Desktop\\BACKUP_" + bucketName+
-                            "\\" + fileName).toPath()); 
+                    .copy(objectData,
+                            new File("C:\\Users\\"
+                                    + System.getProperty("user.name")
+                                    + "\\Desktop\\" + bucketName
+                                    + "\\" + fileName).toPath());
             objectData.close();
             var = true;
         } catch (AmazonServiceException ex) {
@@ -189,7 +192,7 @@ public class S3Methods {
             System.out.println("Request ID:       " + ex.getRequestId());
         } catch (IOException ex) {
             Logger
-                .getLogger(S3Methods.class.getName())
+                    .getLogger(S3Methods.class.getName())
                     .log(Level.SEVERE, null, ex);
         }
         return var;
@@ -202,8 +205,7 @@ public class S3Methods {
                 .withPrefix(""));
         for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
             files
-               .add(new FileModel
-                    (objectSummary.getKey(), (int) objectSummary.getSize()));
+                    .add(new FileModel(objectSummary.getKey(), (int) objectSummary.getSize()));
         }
         return files;
     }

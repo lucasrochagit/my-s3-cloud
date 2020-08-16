@@ -20,8 +20,10 @@ import javax.swing.UIManager;
 public class NewBucket extends javax.swing.JFrame {
 
     private final ArrayList<BucketModel> buckets;
+
     /**
      * Creates new form NewBucket
+     *
      * @param buckets
      */
     public NewBucket(ArrayList<BucketModel> buckets) {
@@ -200,12 +202,11 @@ public class NewBucket extends javax.swing.JFrame {
     public static void appearance() {
         try {
             UIManager
-                    .setLookAndFeel
-                        ("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException |
-                InstantiationException | 
-                IllegalAccessException | 
-                javax.swing.UnsupportedLookAndFeelException ex) {
+                    .setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException
+                | InstantiationException
+                | IllegalAccessException
+                | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger
                     .getLogger(Start.class.getName())
                     .log(java.util.logging.Level.SEVERE, null, ex);
@@ -222,17 +223,24 @@ public class NewBucket extends javax.swing.JFrame {
                         0,
                         new ArrayList<FileModel>()));
                 JOptionPane
-                        .showMessageDialog(null, 
+                        .showMessageDialog(null,
                                 "Bucket saved sucessfully!",
-                                "Information", 
+                                "Information",
                                 JOptionPane.INFORMATION_MESSAGE);
                 bucketName.setText("");
+                backtoBuckets();
             } else {
-                JOptionPane.showMessageDialog(null, 
+                JOptionPane.showMessageDialog(null,
                         "Error during create bucket. Please try again later",
                         "Information",
                         JOptionPane.INFORMATION_MESSAGE);
             }
+        }
+
+        private void backtoBuckets() {
+            MyBuckets b = new MyBuckets(buckets);
+            NewBucket.this.dispose();
+            b.setVisible(true);
         }
     };
     // Variables declaration - do not modify//GEN-BEGIN:variables

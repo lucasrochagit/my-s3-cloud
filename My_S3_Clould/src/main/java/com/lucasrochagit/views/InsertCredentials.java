@@ -7,14 +7,29 @@ package com.lucasrochagit.views;
 
 import com.lucasrochagit.aws.credentials.Credentials;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  *
  * @author lucas
  */
 public class InsertCredentials extends javax.swing.JFrame {
+
+    private String accessKey = "";
+    private String secretKey = "";
 
     /**
      * Creates new form InsertCredentials
@@ -35,11 +50,9 @@ public class InsertCredentials extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         submit = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        secret = new javax.swing.JTextField();
-        access = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        filename = new javax.swing.JTextField();
+        search = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,33 +75,43 @@ public class InsertCredentials extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Lucida Sans Typewriter", 0, 14)); // NOI18N
-        jLabel2.setText("Access Key:");
-
-        jLabel3.setFont(new java.awt.Font("Lucida Sans Typewriter", 0, 14)); // NOI18N
-        jLabel3.setText("Secret Key:");
-
         jLabel4.setFont(new java.awt.Font("Lucida Sans Typewriter", 0, 18)); // NOI18N
         jLabel4.setText("INSERT YOUR IAM CREDENTIALS TO CONTINUE");
+
+        filename.setToolTipText("");
+        filename.setEnabled(false);
+
+        search.setFont(new java.awt.Font("Lucida Sans Typewriter", 0, 18)); // NOI18N
+        search.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        search.setText("SEARCH");
+        search.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        search.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                searchMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                searchMouseExited(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(access, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
-                    .addComponent(secret))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(272, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(235, 235, 235))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(filename, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                     .addContainerGap(128, Short.MAX_VALUE)
@@ -98,17 +121,13 @@ public class InsertCredentials extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(105, 105, 105)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(access, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(secret, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addGap(140, 140, 140)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(filename, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(58, 58, 58)
                 .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(50, 50, 50)
@@ -133,16 +152,17 @@ public class InsertCredentials extends javax.swing.JFrame {
 
     private void submitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitMouseClicked
         // TODO add your handling code here:
-        if (secret.getText().isEmpty() || access.getText().isEmpty()) {
+        if (accessKey.isEmpty() || secretKey.isEmpty()) {
             JOptionPane
                     .showMessageDialog(null,
                             "Insert your IAM credentials to continue",
                             "Information",
                             JOptionPane.INFORMATION_MESSAGE);
+            submit.setEnabled(false);
         } else {
             Credentials
                     .getInstance()
-                    .setCredentials(access.getText(), secret.getText());
+                    .setCredentials(accessKey, secretKey);
             Start s = new Start();
             this.dispose();
             s.setVisible(true);
@@ -160,27 +180,82 @@ public class InsertCredentials extends javax.swing.JFrame {
 
     }//GEN-LAST:event_submitMouseExited
 
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        // TODO add your handling code here:
+        File uploadFile;
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int i = chooser.showSaveDialog(null);
+        if (i == 1) {
+            filename.setText("");
+        } else {
+            uploadFile = chooser.getSelectedFile();
+            filename.setText(uploadFile.getPath());
+            setAWSCredentialsFromFile(uploadFile);
+        }
+    }
+
+    private void setAWSCredentialsFromFile(File file) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String[] title = Files.readAllLines(Paths.get(file.getPath())).get(0).split(",");
+
+            int accessKeyIndex = ArrayUtils.indexOf(title, "Access key ID");
+            int secretKeyIndex = ArrayUtils.indexOf(title, "Secret access key");
+
+            if (accessKeyIndex == -1 || secretKeyIndex == -1) {
+                JOptionPane
+                        .showMessageDialog(null,
+                                "Please select a valid IAM credentials to continue",
+                                "Information",
+                                JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                String[] data = Files.readAllLines(Paths.get(file.getPath())).get(1).split(",");
+
+                accessKey = data[accessKeyIndex];
+                secretKey = data[secretKeyIndex];
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(InsertCredentials.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(InsertCredentials.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_searchMouseClicked
+
+    private void searchMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseEntered
+        // TODO add your handling code here:
+        search.setForeground(Color.BLUE);
+    }//GEN-LAST:event_searchMouseEntered
+
+    private void searchMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseExited
+        // TODO add your handling code here:
+        search.setForeground(Color.BLACK);
+    }//GEN-LAST:event_searchMouseExited
+
     public static void appearance() {
         try {
             UIManager
-                    .setLookAndFeel
-                        ("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                    .setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException
                 | InstantiationException
                 | IllegalAccessException
                 | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger
-                    .getLogger(Start.class.getName())
+                    .getLogger(Start.class
+                            .getName())
                     .log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField access;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField filename;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField secret;
+    private javax.swing.JLabel search;
     private javax.swing.JLabel submit;
     // End of variables declaration//GEN-END:variables
 }

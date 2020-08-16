@@ -25,6 +25,7 @@ public class DownloadFiles extends javax.swing.JFrame {
 
     /**
      * Creates new form UploadFile
+     *
      * @param buckets
      */
     public DownloadFiles(ArrayList<BucketModel> buckets) {
@@ -38,8 +39,7 @@ public class DownloadFiles extends javax.swing.JFrame {
         }
 
         bucketOpt.setModel(
-                new DefaultComboBoxModel
-                    (bucketsNames.toArray(new String[bucketsNames.size()]))
+                new DefaultComboBoxModel(bucketsNames.toArray(new String[bucketsNames.size()]))
         );
 
         filesOpt.setEnabled(false);
@@ -207,22 +207,25 @@ public class DownloadFiles extends javax.swing.JFrame {
 
     private void downloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadMouseClicked
         // TODO add your handling code here:
-        if(filesOpt.getItemCount()==0){
+        if (filesOpt.getItemCount() == 0) {
             JOptionPane
                     .showMessageDialog(null,
                             "Select a item to download",
                             "Information",
                             JOptionPane.INFORMATION_MESSAGE);
-                  
+
         } else {
-            
+
             if (S3Methods
                     .getInstance()
                     .downloadFile(bucketOpt.getSelectedItem().toString(),
                             filesOpt.getSelectedItem().toString())) {
+                String msg = "File download  made sucessfully. Check the folder '"
+                        + bucketOpt.getSelectedItem().toString()
+                        + "' in the Desktop";
                 JOptionPane
                         .showMessageDialog(null,
-                                "File download  made sucessfully",
+                                msg,
                                 "Information",
                                 JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -276,10 +279,9 @@ public class DownloadFiles extends javax.swing.JFrame {
         }
 
         filesOpt.setModel(
-                new DefaultComboBoxModel
-                    (filesNames.toArray(new String[filesNames.size()]))
+                new DefaultComboBoxModel(filesNames.toArray(new String[filesNames.size()]))
         );
-        
+
         filesOpt.setEnabled(true);
     }//GEN-LAST:event_selectMouseClicked
 
@@ -295,16 +297,14 @@ public class DownloadFiles extends javax.swing.JFrame {
     public static void appearance() {
         try {
             UIManager
-                    .setLookAndFeel
-                        ("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException |
-                InstantiationException |
-                IllegalAccessException | 
-                javax.swing.UnsupportedLookAndFeelException ex) {
+                    .setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException
+                | InstantiationException
+                | IllegalAccessException
+                | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger
-                    .getLogger
-                        (DownloadFiles.class.getName())
-                            .log(java.util.logging.Level.SEVERE, null, ex);
+                    .getLogger(DownloadFiles.class.getName())
+                    .log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
